@@ -1,0 +1,19 @@
+name: expire
+on:
+  schedule:
+    - cron: "59 20 1 9 *"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  close:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          [ "$(date -u +%s)" -ge 1788296340 ] || exit 0
+          cp expired.html index.html
+          git config user.name mrazotnik
+          git config user.email 1mikitaduk1@gmail.com
+          git commit -am "Показ демо завершён" || exit 0
+          git push
